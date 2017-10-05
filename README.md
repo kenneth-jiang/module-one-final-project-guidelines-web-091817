@@ -30,7 +30,7 @@ Type q to quit.
 
 Contributors:
 
-Luigi Pepe
+Luigi Pepe,
 Kenneth Jiang
 
 
