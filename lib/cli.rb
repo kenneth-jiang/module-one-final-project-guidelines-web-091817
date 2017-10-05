@@ -7,17 +7,22 @@ class CLI
     puts "Welcome to the Pokedex!"
     sleep(1)
 
+
     option = nil
     while option != 'q'
       intro
       option = gets.chomp.downcase
+      clear
       case option 
       when '1'
-        search_pokemon
+        puts "Insert the name of a Pokemon."
+        Search.search_pokemon
       when '2'
-        search_type
+        puts "Insert the name of a Type."
+        Search.search_type
       when '3'
-        search_ability
+        puts "Insert the name of an Ability."
+        Search.search_ability
       when 'q'
         shut_down
       else
