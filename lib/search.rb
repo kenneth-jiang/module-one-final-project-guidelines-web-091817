@@ -8,43 +8,20 @@ class Search
         pokemon_obj = Pokemon.find_by(name: pokemon_str)
         pokemon_id = pokemon_obj.id
 
-        option1 = 0
-        while option1 != 'q'
+        option = 0
+        while option != 'q'
 
           self.pokemon_intro
-          option1 = gets.chomp.downcase
+          option = gets.chomp.downcase
           clear
-          if option1 == '1' ####### list abilities of pokemon
-            abilities_id = PokemonsAbility.where(pokemon_id: pokemon_id)
-            ability_id = abilities_id.map do |s|
-              s.ability_id
-            end
 
-            abilities = Ability.where(id: ability_id)
-            ability = []
-            count = 1
-            abilities.each do |s|
-              ability << "#{count}. #{s.name.capitalize}"
-              count += 1
-            end
-            self.print_output(ability)
+          if option == '1' ####### list abilities of pokemon
+            self.find_abilities(pokemon_id)
 
-          elsif option1 == '2' ####### list types of pokemon
-            types_id = PokemonsType.where(pokemon_id: pokemon_id)
-            type_id = types_id.map do |s|
-                s.type_id
-            end
+          elsif option == '2' ####### list types of pokemon
+            self.find_types(pokemon_id)
 
-            types = Type.where(id: type_id)
-            type = []
-            count = 1
-            types.each do |s|
-              type << "#{count}. #{s.name.capitalize}"
-              count += 1
-            end
-            self.print_output(type)
-
-          elsif option1 != 'q'
+          elsif option != 'q'
             invalid_input
           end
         end
@@ -60,20 +37,11 @@ class Search
     
     type_input = gets.chomp.downcase
     type_exists = Type.exists?(name: type_input)
-
     if type_exists
       type_obj = Type.find_by(name: type_input)
       type_id = type_obj.id
       types_id = PokemonsType.where(type_id: type_id)
-      pokemons_obj = types_id.map do |s|
-        s.pokemon_id
-      end
-
-      pokemon_obj = pokemons_obj.map do |s|
-          Pokemon.where(id: s)
-      end
-      self.list_pokemons(pokemon_obj)
-    
+      self.parse_pokemon_obj(types_id)
     else
       invalid_input
     end
@@ -88,16 +56,8 @@ class Search
     if ability_exists
       ability_obj = Ability.find_by(name: ability_input)
       ability_id = ability_obj.id
-      abilities = PokemonsAbility.where(ability_id: ability_id)
-      pokemons_obj = abilities.map do |s|
-        s.pokemon_id
-      end
-      pokemon_obj = pokemons_obj.map do |s|
-        Pokemon.where(id: s)
-      end
-
-      self.list_pokemons(pokemon_obj)
-      
+      abilities_id = PokemonsAbility.where(ability_id: ability_id)
+      self.parse_pokemon_obj(abilities_id)
     else
       invalid_input
     end
@@ -123,7 +83,19 @@ class Search
     puts array
   end
 
-  #####################################################
+#####################################################
+
+  def self.parse_pokemon_obj(obj)
+    pokemons_obj = obj.map do |s|
+        s.pokemon_id
+      end
+      pokemon_obj = pokemons_obj.map do |s|
+        Pokemon.where(id: s)
+      end
+      self.list_pokemons(pokemon_obj)
+  end
+
+#####################################################
 
   def self.list_pokemons(pokemon_obj)
     count = 1
@@ -133,6 +105,40 @@ class Search
         count += 1
       end
       self.print_output(pokemon_names)
+  end
+
+#####################################################
+
+  def self.list_type_ability(arg)
+    array = []
+    count = 1
+    arg.each do |s|
+      array << "#{count}. #{s.name.capitalize}"
+      count += 1
+    end
+    self.print_output(array)
+  end 
+
+#####################################################
+
+  def self.find_abilities(pokemon_id)
+    abilities_id = PokemonsAbility.where(pokemon_id: pokemon_id)
+    ability_id = abilities_id.map do |s|
+      s.ability_id
+    end
+    abilities = Ability.where(id: ability_id)
+    self.list_type_ability(abilities)
+  end
+
+#####################################################
+
+  def self.find_types(pokemon_id)
+    types_id = PokemonsType.where(pokemon_id: pokemon_id)
+    type_id = types_id.map do |s|
+      s.type_id
+    end
+    types = Type.where(id: type_id)
+    self.list_type_ability(types)
   end
 end
 
