@@ -9,9 +9,8 @@ You can also search for an ability or type and it will list all the Pokemon asso
 or type.
 
 Install Instructions
+Download the repository "module-one-final-project-guidelines-web-091817". Open your terminal and cd into the repository directory. On your terminal, type bundle install to install all the necessary dependencies. Then type "ruby bin/run.rb" to run the program.
 
-No install needed. Simply go to the module-one-final-project-guidelines-web-091817 directory 
-and type ruby bin/run.rb in the Terminal to start the program.
 
 Program Instructions
 1. After running the program, the Pokedex will boot up.
